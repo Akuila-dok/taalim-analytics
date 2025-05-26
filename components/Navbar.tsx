@@ -9,7 +9,7 @@ export default function Navbar() {
   const unreadMessages = 3;
 
   return (
-    <nav className="bg-teal-500 shadow p-4 flex justify-between items-center sticky top-0 z-50 w-full">
+    <nav className="bg-teal-500 p-4 flex justify-between items-center sticky top-0 z-50 w-full">
       {/* Logo */}
       <div className="text-xl font-bold text-white">TAALIM ANALYTICS</div>
 

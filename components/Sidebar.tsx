@@ -55,7 +55,7 @@ export default function Sidebar() {
   return (
     <>
       {/* Sidebar (bottom on mobile, side on desktop) */}
-      <aside className="w-full md:w-64 bg-teal-600 text-white h-16 md:h-screen fixed bottom-0 md:top-0 md:left-0 z-10">
+      <aside className="w-full  md:w-64 bg-teal-500 text-white h-16 md:h-screen fixed bottom-0 mr-2 pr-2 md:top-0 md:left-0 z-10">
         {/* Desktop title */}
         <div className="hidden md:block p-6 border-b border-teal-500">
           <h2 className="text-xl font-bold text-white">TAALIM ANALYTICS</h2>
