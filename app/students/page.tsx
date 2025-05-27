@@ -7,28 +7,23 @@ import { motion } from 'framer-motion';
 import clsx from 'clsx';
 
 type Student = {
-  stream: string;
-  class: string;
   admissionNumber: string;
   name: string;
 };
 
-const initialStudent: Student = {
-  stream: '',
-  class: '',
-  admissionNumber: '',
-  name: '',
-};
-
 export default function StudentPage() {
-  const [students, setStudents] = useState<Student[]>([initialStudent]);
-  // Track which rows are in editing mode
-  const [editingRows, setEditingRows] = useState<boolean[]>([true]); 
+  const [stream, setStream] = useState(''); // shared stream
+  const [studentClass, setStudentClass] = useState(''); // shared class
+
+  const [students, setStudents] = useState<Student[]>([
+    { admissionNumber: '', name: '' },
+  ]);
+  const [editingRows, setEditingRows] = useState<boolean[]>([true]);
   const router = useRouter();
 
   const handleAddStudent = () => {
-    setStudents([...students, initialStudent]);
-    setEditingRows([...editingRows, true]); // New row editable by default
+    setStudents([...students, { admissionNumber: '', name: '' }]);
+    setEditingRows([...editingRows, true]);
   };
 
   const handleDeleteStudent = (index: number) => {
@@ -56,20 +51,23 @@ export default function StudentPage() {
   };
 
   const handleDone = async () => {
-    // Optional: validate here before sending
+    const studentsWithClassStream = students.map((student) => ({
+      ...student,
+      stream,
+      class: studentClass,
+    }));
 
     try {
       const res = await fetch('/api/students', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ students }),
+        body: JSON.stringify({ students: studentsWithClassStream }),
       });
 
       if (!res.ok) throw new Error('Failed to save students');
 
       alert('Students saved successfully!');
-      // Optionally navigate or clear editing mode
-      setEditingRows(students.map(() => false)); // Lock all rows after save
+      setEditingRows(students.map(() => false));
     } catch (error) {
       alert(`Error: ${(error as Error).message}`);
     }
@@ -78,7 +76,6 @@ export default function StudentPage() {
   return (
     <div className="min-h-screen bg-teal-50 p-4 sm:p-6 font-ubuntu">
       <div className="max-w-6xl mx-auto">
-
         {/* Back Home Button */}
         <div className="mb-4 flex justify-start">
           <motion.button
@@ -97,14 +94,30 @@ export default function StudentPage() {
           🎓 Student Registration Panel
         </h1>
 
+        {/* Stream & Class Inputs */}
+        <div className="flex justify-end gap-4 mb-4">
+          <input
+            type="text"
+            placeholder="Stream (e.g., Form 1)"
+            value={stream}
+            onChange={(e) => setStream(e.target.value)}
+            className="w-32 sm:w-40 px-2 py-1 border border-teal-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-400"
+          />
+          <input
+            type="text"
+            placeholder="Class (e.g., 1A)"
+            value={studentClass}
+            onChange={(e) => setStudentClass(e.target.value)}
+            className="w-24 sm:w-32 px-2 py-1 border border-teal-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-400"
+          />
+        </div>
+
         {/* Table */}
         <div className="overflow-x-auto rounded-xl shadow-md border border-teal-300 bg-white">
           <table className="min-w-full text-sm sm:text-base text-left border-collapse">
             <thead className="bg-teal-100 text-teal-800 border-b border-teal-300">
               <tr>
                 <th className="px-3 py-2 border-r border-teal-300">#</th>
-                <th className="px-3 py-2 border-r border-teal-300">Stream</th>
-                <th className="px-3 py-2 border-r border-teal-300">Class</th>
                 <th className="px-3 py-2 border-r border-teal-300">Admission No.</th>
                 <th className="px-3 py-2 border-r border-teal-300">Student Name</th>
                 <th className="px-3 py-2 text-center">Actions</th>
@@ -121,40 +134,8 @@ export default function StudentPage() {
                       index % 2 === 0 ? 'bg-white' : 'bg-teal-50'
                     )}
                   >
-                    <td className="border-t border-teal-200 px-3 py-2 border-r">{index + 1}</td>
-
-                    {/* Stream */}
                     <td className="border-t border-teal-200 px-3 py-2 border-r">
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          placeholder="Form 1"
-                          value={student.stream}
-                          onChange={(e) =>
-                            handleInputChange(index, 'stream', e.target.value)
-                          }
-                          className="w-full px-2 py-1 border border-teal-200 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-400"
-                        />
-                      ) : (
-                        <span className="block truncate">{student.stream || '-'}</span>
-                      )}
-                    </td>
-
-                    {/* Class */}
-                    <td className="border-t border-teal-200 px-3 py-2 border-r">
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          placeholder="Form 1A"
-                          value={student.class}
-                          onChange={(e) =>
-                            handleInputChange(index, 'class', e.target.value)
-                          }
-                          className="w-full px-2 py-1 border border-teal-200 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-400"
-                        />
-                      ) : (
-                        <span className="block truncate">{student.class || '-'}</span>
-                      )}
+                      {index + 1}
                     </td>
 
                     {/* Admission Number */}
@@ -170,7 +151,9 @@ export default function StudentPage() {
                           className="w-full px-2 py-1 border border-teal-200 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-400"
                         />
                       ) : (
-                        <span className="block truncate">{student.admissionNumber || '-'}</span>
+                        <span className="block truncate">
+                          {student.admissionNumber || '-'}
+                        </span>
                       )}
                     </td>
 
@@ -191,7 +174,7 @@ export default function StudentPage() {
                       )}
                     </td>
 
-                    {/* Actions (Edit/Delete toggle) */}
+                    {/* Actions */}
                     <td className="border-t border-teal-200 px-3 py-2 text-center">
                       <button
                         onClick={() => toggleEditRow(index)}
@@ -214,7 +197,7 @@ export default function StudentPage() {
 
               {/* Add Row Button */}
               <tr>
-                <td colSpan={6} className="text-center py-3">
+                <td colSpan={4} className="text-center py-3">
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
