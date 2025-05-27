@@ -24,7 +24,7 @@ export default function DashboardPage() {
 
         {/* 💠 Teal frame for main content */}
         <div className="mb-10 md:mb-0 border border-teal-500 bg-teal-500 p-3">
-          <main className="w-full h-full p-3  px-4 md:px-6 pb-10 rounded-xl bg-white shadow-md">
+          <main className="w-full mb-4 h-full p-3  px-4 md:px-6 pb-10 rounded-xl bg-white shadow-md">
 
             {/* ✅ User Welcome Section with Framer Motion */}
             <MotionSection
