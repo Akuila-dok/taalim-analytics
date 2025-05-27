@@ -95,20 +95,20 @@ export default function StudentPage() {
         </h1>
 
         {/* Stream & Class Inputs */}
-        <div className="flex justify-end gap-4 mb-4">
+        <div className="flex justify-start md:justify-end gap-1 md:gap-5 mb-4">
           <input
             type="text"
             placeholder="Stream (e.g., Form 1)"
             value={stream}
             onChange={(e) => setStream(e.target.value)}
-            className="w-32 sm:w-40 px-2 py-1 border border-teal-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-400"
+            className="w-40 sm:w-40 px-2 py-1 border border-teal-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-400"
           />
           <input
             type="text"
             placeholder="Class (e.g., 1A)"
             value={studentClass}
             onChange={(e) => setStudentClass(e.target.value)}
-            className="w-24 sm:w-32 px-2 py-1 border border-teal-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-400"
+            className="w-40 sm:w-32 px-2 py-1 border border-teal-300 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-400"
           />
         </div>
 
