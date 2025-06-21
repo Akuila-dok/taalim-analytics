@@ -63,7 +63,7 @@ export default function RegisterPage() {
             <label className="block text-sm font-medium text-teal-700 mb-1">Full Name</label>
             <input
               {...register('name')}
-              placeholder="John Doe"
+              placeholder="Deng Garang"
               className="w-full px-4 py-2 border border-teal-400 rounded-md shadow-sm focus:ring-teal-400 focus:border-teal-400 outline-none transition"
             />
             {errors.name && <p className="text-teal-600 text-sm">{errors.name.message}</p>}
